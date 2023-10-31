@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4; /* Light gray background color */
+      font-family: Arial, sans-serif; /* Use a professional font */
+    }
+
+    .navbar {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between; /* Align elements at the ends of the navbar */
+    }
+
+    .navbar .title {
+      margin: 0; /* Remove default margin */
+    }
+
+    .navbar ul {
+      list-style: none;
+      padding: 0;
+      display: flex; /* Display the list items horizontally */
+    }
+
+    .navbar li {
+      margin-right: 20px; /* Adjust the spacing between list items */
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .traffic-light {
+      width: 100px;
+      text-align: center;
+    }
+
+    .light {
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      border: 1px solid #000;
+      border-radius: 50%;
+      opacity: 0.3; /* Initial opacity for inactive lights */
+    }
+
+    .red { background: red; }
+    .yellow { background: yellow; }
+    .green { background: green; }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h1 class="title">Traffic Management</h1>
+    <ul>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </div>
+  
+
+  <div class="traffic-light">
+    <div class="light red"></div>
+    <div class="light yellow"></div>
+    <div class="light green"></div>
+  </div>
+  
+  <button id="pauseResumeBtn">Pause</button>
+  <div id="timer">Time left: 0 seconds</div>
+  <h2>Automatic Traffic Lights</h2> <!-- Added title below the timer -->
+
+  <hr> <!-- Horizontal line -->
+
+  <section>
+    <h3>OBJECTIVE:</h3>
+    <p>1. Alleviating Congestion: One of the foremost goals is to alleviate traffic congestion within urban areas. This may entail the implementation of strategies like intelligent traffic signal control, effective lane management, and the introduction of congestion pricing.</p>
+<p>2. Improving Safety: Prioritizing road safety is of paramount importance. Projects strive to reduce accidents and fatalities through initiatives like enhanced road design, improved signage, and the deployment of traffic-calming measures.</p>
+<p>3. Enhancing Traffic Efficiency: The project may also focus on optimizing traffic flow by utilizing real-time data and adaptive traffic signal systems. This optimization can lead to reduced travel times and decreased fuel consumption.</p>
+<p>4. Promoting Sustainable Transportation: Encouraging the utilization of sustainable modes of transportation such as public transit, cycling, and walking is essential. This not only reduces the number of vehicles on the road but also minimizes the environmental impact.</p>
+<p>5. Mitigating Emissions: Implementing measures to curtail vehicle emissions is a significant aspect of the project. This can involve the promotion of electric vehicles, fostering carpooling, and optimizing traffic management to diminish idle times.</p>
+    
+  </section>
+
+
+  <section>
+    <h3>DESIGN:</h3>
+    <p>1. We commence by pinpointing critical locations within the traffic network where sensors will be strategically deployed. Our considerations encompass high-traffic zones, crucial intersections, entry and exit points, and vital transit hubs.</p>
+<p>2. Subsequently, we meticulously select sensor types that align with our data requirements for effective traffic monitoring and management. Our sensor portfolio includes traffic cameras, vehicle presence sensors, and environmental sensors, ensuring comprehensive data collection.</p>
+<p>3. To facilitate seamless data transmission from sensors to a central monitoring system, we establish a robust network connectivity framework. We harness advanced technologies such as 5G and LoRaWAN to ensure swift and reliable data transfer.</p>
+<p>4. Our data collection protocols are designed with precision to capture vital information regarding traffic speed, volume, congestion, and environmental factors. This comprehensive data collection forms the foundation of our traffic management insights.</p>
+<p>5. Employing cutting-edge data analysis algorithms, we process sensor data in real-time, generating actionable insights to enhance traffic flow and commuter experiences.</p>
+<p>6.Lastly, our commitment to security is unwavering. We implement rigorous security measures to safeguard sensor data, ensuring protection against unauthorized access and potential cyber threats. Your data's integrity and confidentiality remain our utmost priority throughout the entire traffic network enhancement process.</p>  
+  </section>
+
+  <script>
+    let currentLight = 0; // 0 represents red, 1 represents yellow, 2 represents green
+    const lights = document.querySelectorAll('.light');
+    const pauseResumeBtn = document.getElementById('pauseResumeBtn');
+    const timerDisplay = document.getElementById('timer');
+    const lightDurations = [15000, 5000, 10000]; // Red: 5s, Yellow: 2s, Green: 3s
+    let timerInterval;
+    let timeLeft = lightDurations[currentLight];
+    let isPaused = false;
+
+    function changeLight() {
+      clearInterval(timerInterval); // Clear any previous timer
+      lights[currentLight].style.opacity = 0.3; // Set the current light to inactive
+      currentLight = (currentLight + 1) % 3;
+      lights[currentLight].style.opacity = 1; // Set the new light to active
+      timeLeft = lightDurations[currentLight];
+      updateTimerDisplay();
+
+      // Start a new timer for the current light
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          timeLeft -= 1000;
+          updateTimerDisplay();
+        }
+
+        if (timeLeft === 0) {
+          clearInterval(timerInterval);
+          changeLight(); // Move to the next light when the timer expires
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      timerDisplay.textContent = `Time left: ${timeLeft / 1000} seconds`;
+    }
+
+    // Add click event listeners to the buttons
+    pauseResumeBtn.addEventListener('click', togglePause);
+
+    // Function to pause or resume the timer
+    function togglePause() {
+      isPaused = !isPaused;
+      if (isPaused) {
+        pauseResumeBtn.textContent = 'Resume';
+      } else {
+        pauseResumeBtn.textContent = 'Pause';
+      }
+    }
+
+    // Start with the initial light change
+    changeLight();
+  </script>
+  <h3> RPI MODEL</h3>
+  <img src="rpi.png" alt="RPI block diagram">
+</body>
+</html>
